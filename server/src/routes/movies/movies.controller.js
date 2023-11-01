@@ -32,7 +32,7 @@ async function httpGetMovieById(req,res) {
     return res.status(200).json(movie);
 }
 
-function httpDeleteMovie(req,res) {
+async function httpDeleteMovie(req,res) {
     const movieId = req.params.id;
     if (!existMovieWithId(movieId)) {
         return  res.status(404).json({
@@ -40,7 +40,7 @@ function httpDeleteMovie(req,res) {
         })
     }
 
-    const deletedMovie = deleteMovie(movieId)
+    await deleteMovie(movieId)
     return res.status(200).json({
         ok: true,
       });
