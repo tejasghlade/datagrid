@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 8000;
 const MONGO_URL =
-    "mongodb+srv://tejaslade:$tejaslade$@cluster0.bonpjls.mongodb.net/custom_datagrid?retryWrites=true&w=majority";
+    "mongodb+srv://tejaslade:$tejaslade$@cluster0.bonpjls.mongodb.net/?retryWrites=true&w=majority";
 
 
 

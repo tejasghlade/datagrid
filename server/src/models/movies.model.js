@@ -1,11 +1,12 @@
 const { v4: uuidv4 } = require('uuid');
+const moviesDatabase = require('./movies.mongo');
+
 
 //  initial data
 const movies = new Map();
 
 
 const movie = {
-    "id": uuidv4(),
     "Title": "Avatar",
     "Year": "2009",
     "Rated": "PG-13",
@@ -35,38 +36,45 @@ const movie = {
     ]
 }
 
+saveMovies(movie);
 
-movies.set(movie.id, movie)
+async function saveMovies(movie) {
+    await moviesDatabase.findOneAndUpdate({
+        Title: movie.Title
+    },
+        movie, {
+        upsert: true
+    }
+    )
+}
+
+// movies.set(movie.id, movie)
 // set the initial data 
 
 
-function getAllMovies() {
-    return Array.from(movies.values())
+async function getAllMovies() {
+    return await moviesDatabase.find({})
 }
 
-function existMovieWithId(id) {
-    return movies.has(id)
+async function existMovieWithId(id) {
+    return await moviesDatabase.findOne({
+        id
+    })
 }
 
-function getMovieById(id) {
-    return movies.get(id)
+async function getMovieById(id) {
+    return await moviesDatabase.findById(id)
 }
 
-function addNewMovie(movie) {
-    const id = uuidv4();
-    const movieWithId = { id, ...movie }
+async function addNewMovie(movie) {
+    await saveMovies(movie);
+
+}
+
+async function deleteMovie(id) {
+    const deleted = await moviesDatabase.findByIdAndDelete(id)
     
-    movies.set(
-        movieWithId.id,
-        // Object.assign(movie,{id})
-        movieWithId
-    )
-
-    return movies.get(id);
-}
-
-function deleteMovie(id) {
-    return movies.delete(id)
+    return deleted;
 }
 
 module.exports = {

@@ -2,11 +2,11 @@
 const { getAllMovies, addNewMovie,existMovieWithId ,deleteMovie, getMovieById } = require("../../models/movies.model");
 
 
-function httpGetAllMovies(req,res) {
-    return res.status(200).json(getAllMovies());
+ async function httpGetAllMovies(req,res) {
+    return res.status(200).json( await getAllMovies());
  }
 
-function httpAddNewMovie(req,res) {
+async function httpAddNewMovie(req,res) {
     const movie = req.body;
 
     if (!movie.Title) {
@@ -15,11 +15,11 @@ function httpAddNewMovie(req,res) {
         })
     }
 
-    const newMovie =  addNewMovie(movie);
-    return res.status(201).json(newMovie);
+    await addNewMovie(movie);
+    return res.status(201).json(movie);
  }
 
-function httpGetMovieById(req,res) { 
+async function httpGetMovieById(req,res) { 
     const movieId = req.params.id;
     if (!existMovieWithId(movieId)) {
         return  res.status(404).json({
@@ -28,7 +28,7 @@ function httpGetMovieById(req,res) {
 
     }
 
-    const movie = getMovieById(movieId)
+    const movie = await getMovieById(movieId)
     return res.status(200).json(movie);
 }
 
@@ -41,7 +41,9 @@ function httpDeleteMovie(req,res) {
     }
 
     const deletedMovie = deleteMovie(movieId)
-    return res.status(200).json(deletedMovie);
+    return res.status(200).json({
+        ok: true,
+      });
 }
 
 module.exports = {
